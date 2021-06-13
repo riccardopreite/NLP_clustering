@@ -9,16 +9,24 @@ json_from_server = {}
 
 @app.route('/call')
 def call():
-    print("DC call")
-    kmeans_clustering.clean_main()
+    print("start reclustering")
+    kmeans_clustering.main()
+    print("sending results")
     with open('json_from_server.json') as data_file:
         data_loaded = json.load(data_file)
         return make_response(data_loaded)
 
 @app.route('/get')
 def get():
-    print("DC")
+    print("sending saved cluster")
     with open('json_from_server.json') as data_file:
+        data_loaded = json.load(data_file)
+        return make_response(data_loaded)
+
+@app.route('/getsingle')
+def getsingle():
+    print("sending saved cluster 7")
+    with open('json_from_server7.json') as data_file:
         data_loaded = json.load(data_file)
         return make_response(data_loaded)
 
