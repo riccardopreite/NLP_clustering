@@ -44,6 +44,18 @@ def prepareData(nparray,coordinate,label,unique_labels,i):
     saveFile(full,'json_from_server'+str(i)+'.json')
     return full
 
+def preparenewData(nparray,label,unique_labels,i):
+    fullJson = []
+    for lab in unique_labels:
+        fullJson.append(nparray[label==lab].tolist())
+    labelJson = unique_labels.tolist()
+    full = {
+        'label' : labelJson,
+        'full' : fullJson
+    }
+    saveFile(full,'json_from_server'+str(i)+'.json')
+    return full
+
 def main():
     # new = [16,49,41,4,5,6,8,9,11,12,13,15,20,22,23,24,25,27,28,30,31,32,33,34,35,36,37,39,43,44,45,46,47,48,51,52,53,54,55,57,58,59]
     new = [16,49,4,5,6,8,9,11,12,13,15,20,22,23,24,25,27,28,30,31,32,33,34,35,36,37,39,43,44,45,46,47,48,51,52,53,54,55,57,58,59]
@@ -71,22 +83,23 @@ def main():
         print("end "+str(i)+" cluster")
         translated = []
         js[str(i)] = []
-        for elem in df2:
-            outtemp=[]
-            outtemp.append(float(elem[0]))
-            outtemp.append(float(elem[1]))
-            init = 2
-            while init < len(new):
-                for key in tokenizer[new[init]]:
-                    if str(tokenizer[new[init]][key]) == elem[init]:
-                        temp = key
-                        outtemp.append(temp)
-                        break
-                init = init + 1
-            translated.append(outtemp)
+        # for elem in df2:
+        #     outtemp=[]
+        #     outtemp.append(float(elem[0]))
+        #     outtemp.append(float(elem[1]))
+        #     init = 2
+        #     while init < len(new):
+        #         for key in tokenizer[new[init]]:
+        #             if str(tokenizer[new[init]][key]) == elem[init]:
+        #                 temp = key
+        #                 outtemp.append(temp)
+        #                 break
+        #         init = init + 1
+        #     translated.append(outtemp)
         print("finito treanslating cluster " + str(i))
-        translated = np.asarray(translated)
-        js[str(i)] = prepareData(translated,df2[0:,:2],label2,u_labels2,i)
+        # translated = np.asarray(translated)
+        # js[str(i)] = prepareData(translated,df2[0:,:2],label2,u_labels2,i)
+        js[str(i)] = preparenewData(df2,label2,u_labels2,i)
     saveFile(js,'json_from_server.json')
     saveModel(kmeans_sub)
     return js
@@ -170,6 +183,7 @@ def addElement(key,tokenizer,last_token,row):
         return key,tokenizer,last_token
     for keyd in json_object:
         key,tokenizer,last_token = addElement(json_object[keyd],tokenizer,last_token,row)
+        saveFile(tokenizer,"tokenizer.json")
         return key,tokenizer,last_token
 
 

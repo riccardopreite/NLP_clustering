@@ -30,6 +30,13 @@ def getsingle():
         data_loaded = json.load(data_file)
         return make_response(data_loaded)
 
+@app.route('/gettokenizer')
+def gettokenizer():
+    print("sending tokenizer dict")
+    with open('tokenizer.json') as data_file:
+        data_loaded = json.load(data_file)
+        return make_response(data_loaded)
+
 
 
 
