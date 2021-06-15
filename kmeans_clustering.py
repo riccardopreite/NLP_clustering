@@ -83,22 +83,21 @@ def main():
         print("end "+str(i)+" cluster")
         translated = []
         js[str(i)] = []
-        # for elem in df2:
-        #     outtemp=[]
-        #     outtemp.append(float(elem[0]))
-        #     outtemp.append(float(elem[1]))
-        #     init = 2
-        #     while init < len(new):
-        #         for key in tokenizer[new[init]]:
-        #             if str(tokenizer[new[init]][key]) == elem[init]:
-        #                 temp = key
-        #                 outtemp.append(temp)
-        #                 break
-        #         init = init + 1
-        #     translated.append(outtemp)
+        for elem in df2:
+            init = 2
+            while init < len(new):
+                for key in tokenizer[new[init]]:
+                    if str(tokenizer[new[init]][key]) == elem[init]:
+                        if key == "":
+                            key = "empty"
+                        elem[init] = key
+                        # if(init<len(new)-1):
+                        #     elem[init] = elem[init] + ","
+                        break
+                init = init + 1
+
         print("finito treanslating cluster " + str(i))
-        # translated = np.asarray(translated)
-        # js[str(i)] = prepareData(translated,df2[0:,:2],label2,u_labels2,i)
+
         js[str(i)] = preparenewData(df2,label2,u_labels2,i)
     saveFile(js,'json_from_server.json')
     saveModel(kmeans_sub)

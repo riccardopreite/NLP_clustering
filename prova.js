@@ -57,6 +57,7 @@ function printGraphNoCluster(datas){
   let counter = 0,new_cutted = [4,5,6,8,9,11,12,13,15,20,22,23,24,25,27,28,30,31,32,33,34,35,36,37,39,43,44,45,46,47,48,51,52,53,54,55,57,58,59]
   $("#label_list").empty();
 
+
   for (key in datas['full']){
     let data_temp = []
     counter = 0
@@ -64,16 +65,16 @@ function printGraphNoCluster(datas){
       data_temp.push({x:datas['full'][key][elem][0],y:datas['full'][key][elem][1]})
       let attribute = datas["full"][key][elem].slice(2)
       let id = "list_item"+counter+','+index
-      $("#label_list").append('<li id="'+id+'">');
-      for(ke in attribute){
-        string = ""
-        for(k in tokenizer[new_cutted[ke]]){
-          if (tokenizer[new_cutted[ke]][k] == attribute[ke]){
-            $("#label_list").append(k)
-          }
-        }
-      }
-      $("#label_list").append('</li>');
+      $("#label_list").append('<li id="'+id+'"></li>');
+      // console.log($("#"+id))
+      document.getElementById(id).innerHTML = "<p>"+attribute+"</p>"
+      // $("#"+id).append("<p>"+attribute+"</p>")
+      // for(ke in attribute){
+      //   string = ""
+      //   if(ke) $("#"+id).append(",")
+      //   $("#"+id).append(attribute[ke])
+      // }
+      // $("#label_list").append('</li>');
 
       counter++
 
@@ -118,19 +119,40 @@ function printGraphNoCluster(datas){
       }
     );
   })
+  /*aggiungere freccette avanti e indietro*/
+  showRightlabel(0,10)
+}
+
+function showRightlabel(start,end){
+  let ul = document.getElementById("label_list")
+  if (!ul.childNodes || ul.childNodes.length == 0) return;
+
+  for (var itemi=0;itemi<ul.childNodes.length;itemi++) {
+    var item = ul.childNodes[itemi];
+    if (item.nodeName == "LI") {
+      if(itemi >= start && itemi<=end)
+        item.style.display = ""
+      else
+        item.style.display = "none"
+    }
+  }
 
 }
+
 var data = undefined, clusterChart = undefined,tokenizer = {}
 $( document ).ready(function() {
-    gettokenizer()
+    // gettokenizer()
+    // getFullData()
+    // getsingle()
 });
 
 // $('#a').on('mouseover', function() { t(0); });
 // $('#b').on('mouseover', function() { t(1); });
-$('#c').on('click', function() { var cluster = $('#lname').val();printGraphNoCluster(data[cluster]) });
+$('#redraw').on('click', function() { var cluster = $('#lname').val();printGraphNoCluster(data[cluster]) });
+$('#getcluster').on('click', function() { getsingle() });
 
 
-$('#d').on('click', function() {
+$('#recluster').on('click', function() {
   recluster()
  });
 //
