@@ -1,7 +1,7 @@
 from flask import Flask, render_template, flash, request, Response,jsonify,make_response
 import os.path
 import json
-import kmeans_clustering
+import kmeans_clustering_more_sliced
 app = Flask(__name__,static_url_path='', static_folder='./')
 app.config['SECRET_KEY'] = 'SjdnUends821Jsdlkvxh391ksdODnejdDw'
 
@@ -22,6 +22,24 @@ def get():
     with open('json_from_server.json') as data_file:
         data_loaded = json.load(data_file)
         return make_response(data_loaded)
+
+@app.route('/getlat_lon')
+def getlat():
+    print("sending saved cluster")
+    # i = 0
+    # json_to_send = {}
+    # while i < 9:
+    #     with open('lat&lon_'+str(i)+'.json') as data_file:
+    #         json_to_send['lat_lon_'+str(i)] = json.load(data_file)
+    #
+    #     i = i + 1
+    # kmeans_clustering_more_sliced.saveFile(json_to_send,"full.json")
+    # return make_response(json_to_send)
+
+    with open('full.json') as data_file:
+        data_loaded = json.load(data_file)
+        return make_response(data_loaded)
+
 
 @app.route('/getsingle')
 def getsingle():

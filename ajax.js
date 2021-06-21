@@ -22,7 +22,7 @@ function getsingle(){
   });
 }
 
-function getFullData(){
+function oldgetFullData(){
   $.ajax({
     url: "http://192.168.0.80:3000/get",
     success: function(json_from_server){
@@ -31,6 +31,20 @@ function getFullData(){
       console.log(data);
       // printGraph(0)
       printGraphNoCluster(data[0])
+    }
+  });
+}
+
+function getFullData(){
+  $.ajax({
+    // url: "http://192.168.0.137:3000/getlat_lon",
+    url: "http://192.168.0.80:3000/getlat_lon",
+
+    success: function(json_from_server){
+      data = json_from_server
+      console.log("RECEIVED");
+      console.log(data);
+      plotCluster(data["lat_lon_0"],'0')
     }
   });
 }
