@@ -25,7 +25,5 @@ smog@maryjane:~$ python3 server.py
 smog@maryjane:~$ python3 kmeans_clustering_more_sliced.py
 ```
 
-To run correctly it is necessary to change the ip and use yours in js/ajax.js
-
 #Preview
 ![testo alt](/foto/home.png "Screenshoot of the results on website")
