@@ -6,8 +6,6 @@ Natural Language Processing of business activity from Yelp dataset based on cert
 * Attributes (Accepts credit card, parking, ecc)
 
 
-NLP_clustering
-
 # To install packages:
 ```console
 smog@maryjane:~$ pip3 install .
