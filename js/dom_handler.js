@@ -1,7 +1,7 @@
 
 var start = 0, end = 10;
 var start_attribute = 0, end_attribute = 10;
-let colors = ['#CD5700', '#79443B', '#7FFFD4', '#884DA7	','#708090', '#531B00','#E97451	','#00FF00','#FBCEB1','#E52B50','#FFBF00','#FC6C85','#808000','#FF6600','#007FFF','#FFFDD0','#DF73FF','#CC9966','#C2B280','#F400A1','#93C572','#293133','#A98307','#4B0082','#E30B5C']
+let colors = ['#CD5700', '#79443B', '#E52B50', '#884DA7	','#708090', '#531B00','#E97451	','#00FF00','#FBCEB1','#7FFFD4','#FFBF00','#FC6C85','#808000','#FF6600','#007FFF','#FFFDD0','#DF73FF','#CC9966','#C2B280','#F400A1','#93C572','#293133','#A98307','#4B0082','#E30B5C']
 
 function drawJsonPercentage(myObj,index){
   //ricevo l'oggetto con attribute_0 già scelto
