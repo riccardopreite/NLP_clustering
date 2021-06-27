@@ -1,8 +1,7 @@
 var data = {}, statistics = {};
 function getFullData(){
   $.ajax({
-    // url: "http://192.168.0.137:3000/getlat_lon",
-    url: "http://192.168.0.80:3000/getlat_lon",
+    url: "http://localhost:3000/getlat_lon",
 
     success: function(json_from_server){
       data = json_from_server["cluster"]
@@ -17,7 +16,6 @@ function getFullData(){
 
 function get_statistics(){
   $.ajax({
-    // url: "http://192.168.0.137:3000/getlat_lon",
     url: "http://192.168.0.80:3000/get_stat",
 
     success: function(statistics_from_server){
