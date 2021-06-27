@@ -64,7 +64,12 @@ def call():
     print("sending results")
     savenewfull()
     calc_stat()
-    getlat()
+    with open('json/full.json') as data_file:
+        json_from_server["cluster"] = json.load(data_file)
+        with open('json/statistics.json') as statistic_file:
+            json_from_server["statistics"] = json.load(statistic_file)
+
+            return make_response(json_from_server)
 
 
 
