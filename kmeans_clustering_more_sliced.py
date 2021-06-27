@@ -32,29 +32,6 @@ def saveFile(data,name):
                       separators=(',', ': '), ensure_ascii=False)
         outfile.write(to_unicode(str_))
 
-# def translateCluster(categories_json,lab,u_labels_attr,df_attr,label_attr,columns):
-#     cat_key = "categories_"+str(lab)
-#     categories_json[cat_key] = {}
-#
-#     for attribute_cluster in u_labels_attr:
-#         attr_key = "attribute_"+str(attribute_cluster)
-#         categories_json[cat_key][attr_key] = []
-#         top_index = 0
-#         temp = df_attr[attribute_cluster == label_attr].tolist()
-#         for row in temp:
-#             label_index = 0
-#             for elem in row:
-#                 categories_json[cat_key][attr_key].append([])
-#                 if label_index < 2:
-#                     categories_json[cat_key][attr_key][top_index].append(elem)
-#                 elif elem != 0 and elem != '0':
-#                     if columns[label_index] != "categories_":
-#                         categories_json[cat_key][attr_key][top_index].append(columns[label_index])
-#
-#                 label_index = label_index + 1
-#             top_index = top_index + 1
-#     return categories_json
-
 def translateCluster(categories_json,lab,u_labels_attr,df_attr,label_attr,columns):
     cat_key = "categories_"+str(lab)
     categories_json[cat_key] = {}
@@ -70,7 +47,7 @@ def translateCluster(categories_json,lab,u_labels_attr,df_attr,label_attr,column
             for elem in row:
                 if label_index < 2:
                     vect.append(elem)
-                elif elem != 0 and elem != '0':
+                elif str(elem) != '0.0' and str(elem) != '0':
                     if columns[label_index] != "categories_":
                         vect.append(columns[label_index])
                 label_index = label_index + 1
@@ -80,126 +57,81 @@ def translateCluster(categories_json,lab,u_labels_attr,df_attr,label_attr,column
     return categories_json
 
 
-def preparenewData(nparray,label,unique_labels,latlon_cluster,cat_cluster):
-    fullJson = []
-    for lab in unique_labels:
-        fullJson.append(nparray[label==lab].tolist())
-    labelJson = unique_labels.tolist()
-    full = {
-        'label' : labelJson,
-        'full' : fullJson
-    }
-    saveFile(full,'json_from_server_'+str(latlon_cluster)+'_'+str(cat_cluster)+'.json')
-    return full
-
-
-
 
 def main():
-
+    #cluster lat lon is right 9 different cluster
     cluster = 9
-    cluster_attr = 5
+    cluster_attr = 4
     cluster_categories = 15
-    business_csv = './yelp_academic_dataset_business.csv'
 
-
-    # np_data, origin_df,start_categories_index,columns = read_df.read_df(business_csv)
-    np_data, start_categories_index,columns = read_df.read_df(business_csv)
-
-
-    print("returned data from csv, starting clustering from lat&lon")
-    kmeans,df,label,u_labels = k(data=np_data,cluster=cluster)
-    del np_data
-    print("finished clustering from lat&lon")
-
-    js = {}
-    print("starting sub clustering...")
+        #LAT&LON MODEL
+    kmeans = KMeans(n_clusters=cluster, init='k-means++', n_init=4,random_state=0, verbose=0)
+        #ATTRIBUTE MODEL
     kmeans_sub_attr = KMeans(n_clusters=cluster_attr, init='k-means++', n_init=3,random_state=0, verbose=0)
+        #CATEGORIES MODEL
     kmeans_sub_cate = KMeans(n_clusters=cluster_categories, init='k-means++', n_init=3,random_state=0, verbose=0)
-    kmeans_sub_1 = KMeans(n_clusters=1, init='k-means++', random_state=0, verbose=1)
+        #ONE ELEMENT MODEL
+    kmeans_sub_1 = KMeans(n_clusters=1, init='k-means++', random_state=0, verbose=0)
 
-    df_cat,label_cat,u_labels_cat = categoriesk(kmeans_sub_1,data=df[label == 8],col=start_categories_index)
+    business_csv = './yelp_academic_dataset_business.csv'
+    np_data, start_categories_index,columns = read_df.read_df(business_csv)
+    print("returned data from csv, starting clustering from lat&lon")
 
+    kmeans,df,label,u_labels = k(kmeans,data=np_data,cluster=cluster)
+    print("finished clustering from lat&lon")
+    del np_data
 
+    print("starting sub clustering...")
     for i in u_labels:
-
+        categories_json = {}
         print("start "+str(i)+" cluster")
         if len(df[label == i]) == 1:
-            print("1")
             print("starting categories clustering")
-
-            df_cat,label_cat,u_labels_cat = categoriesk(kmeans_sub_1,data=df[label == i],col=start_categories_index)
-
-            categories_json = {}
+            df_cat,label_cat,u_labels_cat = categoriesk(kmeans_sub_1,data=df[label == i],start_categories_col=start_categories_index)
             for lab in u_labels_cat:
                 print("starting attribute sub clustering")
-                df_attr,label_attr,u_labels_attr = attrk(kmeans_sub_1,data=df_cat,col=start_categories_index)
+                df_attr,label_attr,u_labels_attr = attrk(kmeans_sub_1,data=df_cat,start_categories_col=start_categories_index)
                 print("fixing data, removing 0 value...")
                 categories_json = translateCluster(categories_json,lab,u_labels_attr,df_attr,label_attr,columns)
-
-            saveFile(categories_json,"lat&lon_"+str(i)+".json")
+                print("fixed data, ended attribute sub clustering lat&lon: " +str(i) + " categories: " + str(lab))
 
         else:
             print("starting categories clustering")
 
-            df_cat,label_cat,u_labels_cat = categoriesk(kmeans_sub_cate,data=df[label==i],col=start_categories_index)
-
-            categories_json = {}
+            df_cat,label_cat,u_labels_cat = categoriesk(kmeans_sub_cate,data=df[label==i],start_categories_col=start_categories_index)
             for lab in u_labels_cat:
                 print("starting attribute sub clustering lat&lon: " +str(i) + " categories: " + str(lab))
-                df_attr,label_attr,u_labels_attr = attrk(kmeans_sub_attr,data=df_cat[lab==label_cat],col=start_categories_index)
+                df_attr,label_attr,u_labels_attr = attrk(kmeans_sub_attr,data=df_cat[lab==label_cat],start_categories_col=start_categories_index)
                 print("fixing data, removing 0 value...")
                 categories_json = translateCluster(categories_json,lab,u_labels_attr,df_attr,label_attr,columns)
                 print("fixed data, ended attribute sub clustering lat&lon: " +str(i) + " categories: " + str(lab))
-            saveFile(categories_json,"lat&lon_"+str(i)+".json")
-            # categories_json = {}
 
-
+        saveFile(categories_json,"json/lat&lon_"+str(i)+".json")
+        categories_json = {}
         print("end "+str(i)+" cluster")
-    return js
+    return True
 
-def k(data,cluster):
-
-    kmeans = KMeans(n_clusters=cluster, init='k-means++', n_init=4,random_state=0, verbose=0)
-
-    label = kmeans.fit_predict(data[0:,:2])
+def k(model,data,cluster):
+    #Predict only on first two columns, lat&lon
+    label = model.fit_predict(data[0:,:2])
     u_labels = np.unique(label)
 
-    return kmeans,data,label,u_labels
+    return model,data,label,u_labels
 
-def categoriesk(model,data,col):
-    if len(data) == 1:
-        model = KMeans(n_clusters=1, init='k-means++', n_init=3,random_state=0, verbose=0)
-    label = model.fit_predict(data[0:,col:])
+def categoriesk(model,data,start_categories_col):
+    #Predict only on last columns, categories
+    label = model.fit_predict(data[0:,start_categories_col:])
     u_labels = np.unique(label)
 
     return data,label,u_labels
 
 
-def attrk(model,data,col):
-    if len(data) == 1:
-        model = KMeans(n_clusters=1, init='k-means++', n_init=3,random_state=0, verbose=0)
-    label = model.fit_predict(data[0:,2:col])
+def attrk(model,data,start_categories_col):
+    #Predict only on middle columns, attributes
+    label = model.fit_predict(data[0:,2:start_categories_col])
     u_labels = np.unique(label)
 
     return data,label,u_labels
-
-def oldcategoriesk(model,data):
-
-    label = model.fit_predict(data[0:,2].reshape(-1, 1))
-    u_labels = np.unique(label)
-
-    return model,data,label,u_labels
-
-def oldattrk(model,data,col):
-
-    label = model.fit_predict(data[0:,col:])
-    u_labels = np.unique(label)
-
-    return model,data,label,u_labels
-
-
-
 
 def plot(df,cluster,label,u_labels):
 

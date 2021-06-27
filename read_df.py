@@ -112,7 +112,7 @@ def read_df(csv_file):
             break
         i = i + 1
     print("categories index start from " + str(i))
-    return attr.values,attr,i,attr.columns
+    return attr.values,i,attr.columns
 
 if __name__ == "__main__":
     business_csv = './yelp_academic_dataset_business.csv'

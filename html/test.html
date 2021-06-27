@@ -1,0 +1,67 @@
+<html>
+  <head>
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/0.6.6/chartjs-plugin-zoom.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/arrow.css">
+    <link rel="stylesheet" type="text/css" href="css/div.css">
+
+  </head>
+  <body>
+
+    <div id="top">
+      <div style="width:100%;">
+        <div style="width:50%; float:left;">
+          <label for="latlon">Lat_Lon Cluster:</label>
+          <input type="number" id="latlon" name="latlon" max="8" min="0" value="0">
+          <label for="lcat">Categories sub Cluster:</label>
+          <input type="number" id="lcat" name="lcat" max="14" min="0" value="0">
+
+          <button id="getcluster">get cluster</button>
+          <button id="redraw">redraw</button>
+          <button id="recluster">re cluster</button>
+        </div>
+        <div style="width:485px;float:right; margin-right:16.5em; margin-top:0.5em;text-align:center;">
+          <i style="float:left; margin-left:2.2em;" class="arrow left" onclick="prevAttributePerc()"></i>
+          <label for="attribute">Choose attribute percentages:</label>
+
+          <select name="attribute" id="attribute" onchange="changeAttributepercentage(this.options[this.selectedIndex].value,this.selectedIndex);">
+            <option value="attribute_0">attribute_0</option>
+            <option value="attribute_1">attribute_1</option>
+            <option value="attribute_2">attribute_2</option>
+            <option value="attribute_3">attribute_3</option>
+            <!-- <option value="attribute_4">attribute_4</option> -->
+          </select>
+          <i style="float:right; margin-right:2.5em;" class="arrow right" onclick="nextAttributePerc()"></i>
+        </div>
+    </div>
+    <div style=" ">
+      <div class="chart-container" style="width: 60%; float:left;">
+        <canvas id="myChart" style="width:600px; height:420px;" ></canvas>
+      </div>
+      <div  style="width: 500px; height: 400px;float:right; margin-right: 12em;  text-align: center;">
+        <p id="demo"></p>
+      </div>
+    </div>
+
+    </div>
+    <div id="bottom">
+      <div style="width:100%; " >
+        <i  style="float:left; margin-left:1.5em;" class="arrow left" onclick="prevAttribute()"></i>
+        <i  style="float:right; margin-right:1.5em;" class="arrow right" onclick="nextAttribute()"></i>
+      </div>
+
+      <div class="chart-container" style="width: 1200px;height: 700px;margin: 0.5em;">
+        <ul id="label_list">
+        </ul>
+      </div>
+    </div>
+
+    <script src="js/ajax.js"></script>
+    <script src="js/dom_handler.js"></script>
+
+
+</body></html>

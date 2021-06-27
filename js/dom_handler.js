@@ -1,12 +1,42 @@
 
 var start = 0, end = 10;
+var start_attribute = 0, end_attribute = 10;
+let colors = ['#CD5700', '#79443B', '#7FFFD4', '#884DA7	','#708090', '#531B00','#E97451	','#00FF00','#FBCEB1','#E52B50','#FFBF00','#FC6C85','#808000','#FF6600','#007FFF','#FFFDD0','#DF73FF','#CC9966','#C2B280','#F400A1','#93C572','#293133','#A98307','#4B0082','#E30B5C']
+
+function drawJsonPercentage(myObj,index){
+  //ricevo l'oggetto con attribute_0 già scelto
+
+  let text = "<table border='1' style='table-layout:fixed;width: 485px;'><col width='20px' /> <col width='5px' />"
+  counter = 0
+  for (let x in myObj) {
+    tex = myObj[x].toString().slice(0, 6) + "%"
+    key = x.replace("{","")
+    key = key.replace("}","")
+    if(counter >= start_attribute && counter<=end_attribute)
+      text += "<tr><td style='overflow: hidden;'><font color='"+ colors[index]+"'>" + key + "</font></td>"+"<td><font color='"+ colors[index]+"'>" + tex + "</font></td>"+"</tr>";
+    counter++
+  }
+  text += "</table>"
+  document.getElementById("demo").innerHTML = text;
+}
+
+function changeAttributepercentage(element,index){
+  var lat_cluster = $('#latlon').val();
+  let lat_lab = 'lat_lon_'+lat_cluster;
+  var cat_cluster = "categories_" + $('#lcat').val();
+  start_attribute = 0, end_attribute = 10;
+
+  drawJsonPercentage(statistics[lat_lab][cat_cluster][element],index)
+}
+
+
+
 function plotCluster(datas,categories){
   let index = 0
   let cat_lab = "categories_"+categories
-  // colors = ['#00FF00', '#79443B', '#531B00', '#E97451	','#CD5700','#7FFFD4', '#FBCEB1', '#E52B50', '#FFBF00','#884DA7','#FC6C85','#808000','#FF6600','#708090','#007FFF','#FFFDD0', '#DF73FF', '#CC9966', '#C2B280','#F400A1','#93C572','#293133','#A98307','#4B0082','#E30B5C']
-  let colors = ['#00FF00', '#79443B', '#7FFFD4', '#884DA7	','#708090']
   var data_list=[]
   let counter = 0;
+  start = 0, end = 10;
   $("#label_list").empty();
 
   for (attr in datas[cat_lab]){
@@ -33,11 +63,6 @@ function plotCluster(datas,categories){
     data_list.push(tmp);
     index++
   }
-
-
-
-
-  console.log("FINITO");
   if(clusterChart) clusterChart.destroy();
 
   clusterChart = new Chart($('#myChart'), {
@@ -46,14 +71,14 @@ function plotCluster(datas,categories){
       datasets: data_list
     },
     options: {
-
+      maintainAspectRatio: false,
       pan: {
         enabled: true,
         mode: 'xy',
       },
       zoom: {
         enabled: true,
-        mode: 'xy', // or 'x' for "drag" version
+        mode: 'xy',
       },
     }
   })
@@ -68,7 +93,6 @@ function plotCluster(datas,categories){
       }
     );
   })
-  /*aggiungere freccette avanti e indietro*/
   showRightlabel(start,end)
 }
 
@@ -115,23 +139,69 @@ function prevAttribute(){
   showRightlabel(start,end)
 }
 
+function nextAttributePerc(){
+  let select = document.getElementById("attribute")
+  var lat_cluster = $('#latlon').val();
+  let lat_lab = 'lat_lon_'+lat_cluster;
+  var cat_cluster = "categories_" + $('#lcat').val();
+  let attr = select.options[select.selectedIndex].value
+  let index = select.selectedIndex
+  let len = Object.keys(statistics[lat_lab][cat_cluster][attr]).length;
+  if(end_attribute + 10 < len){
+    start_attribute = start_attribute + 10
+    end_attribute = end_attribute + 10
+  }
+  else{
+    end_attribute = len - 1
+    start_attribute = end_attribute - 10
+  }
+
+  drawJsonPercentage(statistics[lat_lab][cat_cluster][attr],index)
+}
+
+function prevAttributePerc(){
+  let select = document.getElementById("attribute")
+  var lat_cluster = $('#latlon').val();
+  let lat_lab = 'lat_lon_'+lat_cluster;
+  var cat_cluster = "categories_" + $('#lcat').val();
+  let attr = select.options[select.selectedIndex].value
+  let index = select.selectedIndex
+
+  if(start_attribute - 10 < 0){
+    start_attribute = 0
+    end_attribute = 10
+  }
+  else {
+    start_attribute = start_attribute - 10
+    end_attribute = end_attribute - 10
+  }
+
+  drawJsonPercentage(statistics[lat_lab][cat_cluster][attr],index)
+}
+
 
 var data = undefined, clusterChart = undefined,tokenizer = {}
 $( document ).ready(function() {
-    // gettokenizer()
-    // getFullData()
-    // getsingle()
+    getFullData()
 });
 
 $('#redraw').on('click', function() {
   var lat_cluster = $('#latlon').val();
   let lat_lab = 'lat_lon_'+lat_cluster;
-  if(lat_cluster == 8) lat_lab = 'lat_lon_0';
   var cat_cluster = $('#lcat').val();
-
+  let select = document.getElementById("attribute")
+  var cat_cluster_lab = "categories_" + $('#lcat').val();
+  let attr = select.options[select.selectedIndex].value
+  let index = select.selectedIndex
+  start = 0;
+  end = 10;
+  start_attribute = 0, end_attribute = 10;
   plotCluster(data[lat_lab],cat_cluster)
+  drawJsonPercentage(statistics[lat_lab][cat_cluster_lab][attr],index)
 });
-$('#getcluster').on('click', function() { getFullData() });
+$('#getcluster').on('click', function() {
+  getFullData()
+});
 
 
 $('#recluster').on('click', function() {
