@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, request, Response,jsonify,make_response
+from flask import Flask, render_template, flash, request, Response,jsonify,make_response,send_from_directory
 import os.path
 import json
 import pandas as pd
@@ -95,6 +95,11 @@ def get_file(filename):  # pragma: no cover
         return open(src).read()
     except IOError as exc:
         return str(exc)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'foto/favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/')
 def index():

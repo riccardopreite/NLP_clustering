@@ -16,7 +16,7 @@ function getFullData(){
 
 function get_statistics(){
   $.ajax({
-    url: "http://192.168.0.80:3000/get_stat",
+    url: "http://localhost:3000/get_stat",
 
     success: function(statistics_from_server){
       statistics = statistics_from_server
@@ -29,7 +29,7 @@ function get_statistics(){
 
 function recluster(){
   $.ajax({
-    url: "http://192.168.0.80:3000/call",
+    url: "http://localhost:3000/call",
     success: function(json_from_server){
       data = json_from_server
       plotCluster(data["lat_lon_0"],'0')
