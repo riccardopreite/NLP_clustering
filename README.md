@@ -16,6 +16,8 @@ smog@maryjane:~$ pip3 install .
 ```console
 smog@maryjane:~$ python3 server.py
 ```
+## To use front-end view:
+  http://localhost:3000/
 
 # To Run only k-means:
 
