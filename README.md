@@ -1,5 +1,8 @@
 # Artificial intelligence course project 2020/21
-Natural Language Processing of business activity from Yelp dataset based on certain parameters:
+## Natural Language Processing on Yelp dataset.
+Yelp Dataset is a collection of date from every source about business activity.
+
+based on certain parameters:
 
 * Position (Latitude&Longitude)
 * Categories (Restaurant, Bar, ecc)
