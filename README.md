@@ -22,13 +22,15 @@ https://github.com/Yelp/dataset-examples
 
 
 
+
+
+
+## Clustering
+
 The goal was to obtain different cluster of cluster with this shape:
 * Cluster_lat_lon:
   * Cluster_categories:
     - Cluster attributes  
-
-
-## Clustering
 
 ### Position cluster
 
@@ -39,7 +41,7 @@ The number found for the cluster_lat_lon is **9** with a cluster that has only o
 ### Categories and Attributes cluster
 
 Another two subdivision were needed because the hardware used for the training was very limited.
-A stable situatuion has been found using **4 categories cluster** and for each one another subclustering is applied for a total number of **14 attributes cluster**. These number were the best approximation due to the poor hardware but it seems to produce decent results.
+A stable situatuion has been found using **15 categories cluster** and for each one another subclustering is applied for a total number of **4 attributes cluster**. These number were the best approximation due to the poor hardware but it seems to produce decent results.
 
 
 
