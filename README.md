@@ -1,5 +1,5 @@
 # Artificial intelligence course project 2020/21
-## Natural Language Processing on Yelp dataset.
+## Natural Language Processing on Yelp dataset
 
 Yelp Dataset is a collection of date from every source about business activity. It consist on 6 different dataset:
 * business.json
