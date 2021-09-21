@@ -21,8 +21,7 @@ The goal was to obtain different cluster of cluster with this shape:
     - Cluster attributes  
 
 
-It was also necessary to define the number of cluster.
-
+## Clustering
 ### Position cluster
 
 This was the first partition of the project but this needed just few try to find out the right number of cluster. 
