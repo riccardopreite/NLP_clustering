@@ -19,6 +19,8 @@ The goal was to obtain different cluster of cluster with this shape:
 * Cluster_lat_lon:
   * Cluster_categories:
     - Cluster attributes  
+
+
 It was also necessary to define the number of cluster.
 
 ### Position cluster
