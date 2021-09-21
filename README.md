@@ -15,6 +15,13 @@ In this project only **business.json** was used to make a model that can create 
 * Categories (Restaurant, Bar, ecc)
 * Attributes (Accepts credit card, parking, ecc)
 
+## From json to csv
+To train the model **Scikit-learn** has been used, especially kmeans clustering. The initial problem was that a json can contain other json inside. A conversion from json to csv
+was necessary to create a single column for each possibily key in the json. Yelp leave in the documentation a link to a github repo to convert json to csv and with some examples:
+https://github.com/Yelp/dataset-examples
+
+
+
 The goal was to obtain different cluster of cluster with this shape:
 * Cluster_lat_lon:
   * Cluster_categories:
@@ -22,23 +29,19 @@ The goal was to obtain different cluster of cluster with this shape:
 
 
 ## Clustering
+
 ### Position cluster
 
 This was the first partition of the project but this needed just few try to find out the right number of cluster. 
-When these were to few points at a big distance were in the same cluster and when the number of cluster was to high it was possible to see some cluster separated that could be only one. 
+When this number was low distant points were in the same cluster and when the number of cluster was to high it was possible to see some cluster separated that could be only one. 
 The number found for the cluster_lat_lon is **9** with a cluster that has only one point because is an outlier.
 
 ### Categories and Attributes cluster
 
 Another two subdivision were needed because the hardware used for the training was very limited.
-A stable situatuion has been found using **4 categories cluster** (like Restaurant, Gym ecc) and for each one another subclustering is applied for a total number of **14 attributes cluster**. These number were the best approximation due to the poor hardware but it seems to produce decent results.
+A stable situatuion has been found using **4 categories cluster** and for each one another subclustering is applied for a total number of **14 attributes cluster**. These number were the best approximation due to the poor hardware but it seems to produce decent results.
 
 
-
-## From json to csv
-To train the model **Scikit-learn** has been used, especially kmeans clustering. The initial problem was that a json can contain other json inside. A conversion from json to csv
-was necessary to create a single column for each possibily key in the json. Yelp leave in the documentation a link to a github repo to convert json to csv and with some examples:
-https://github.com/Yelp/dataset-examples
 
 ## Final works
 
